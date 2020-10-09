@@ -50,3 +50,29 @@ func GetUser(ctx *gin.Context) {
 func FindUser(ctx *gin.Context) {
 
 }
+
+func UpdateUser(ctx *gin.Context) {
+	userId, userErr := strconv.ParseInt(ctx.Param("user_id"), 10, 64)
+	if userErr != nil {
+		err := errors.NewBadRequestError("Id should be a number")
+		ctx.JSON(err.Status, err)
+		return
+	}
+
+	var user users.User
+	if err := ctx.ShouldBindJSON(&user); err != nil {
+		restErr := errors.NewBadRequestError("Invalid json body")
+		ctx.JSON(restErr.Status, restErr)
+		return
+	}
+	user.Id = userId
+	isPartial := ctx.Request.Method == http.MethodPatch
+
+	res, err := services.UpdateUser(isPartial, user)
+	if err != nil {
+		ctx.JSON(err.Status, err)
+		return
+	}
+	ctx.JSON(http.StatusOK, res)
+	return
+}
