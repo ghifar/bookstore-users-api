@@ -2,10 +2,6 @@ package errors
 
 import "net/http"
 
-const (
-	NO_ROWS = "no rows in result set"
-)
-
 type RestErr struct {
 	Message string `json:"message"`
 	Status  int    `json:"status"`
