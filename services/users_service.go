@@ -5,6 +5,14 @@ import (
 	"github.com/ghifar/bookstore-users-api/utils/errors"
 )
 
+func GetUser(userId int64) (*users.User, *errors.RestErr) {
+	res := &users.User{Id: userId}
+	if err := res.Get(); err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
 func CreateUser(user users.User) (*users.User, *errors.RestErr) {
 	if err := user.ValidateField(); err != nil {
 		panic(err)
@@ -18,21 +26,13 @@ func CreateUser(user users.User) (*users.User, *errors.RestErr) {
 	return &user, nil
 }
 
-func GetUser(userId int64) (*users.User, *errors.RestErr) {
-	res := &users.User{Id: userId}
-	if err := res.Get(); err != nil {
-		return nil, err
-	}
-	return res, nil
-}
-
 func UpdateUser(isPartial bool, user users.User) (*users.User, *errors.RestErr) {
 	//find the user
 	curr, err := GetUser(user.Id)
 	if err != nil {
 		return nil, err
 	}
-	
+
 	if isPartial {
 		if user.FirstName != "" {
 			curr.FirstName = user.FirstName
@@ -54,4 +54,9 @@ func UpdateUser(isPartial bool, user users.User) (*users.User, *errors.RestErr) 
 		return nil, err
 	}
 	return curr, nil
+}
+
+func DeleteUser(userId int64) *errors.RestErr {
+	res := &users.User{Id: userId}
+	return res.Delete()
 }
