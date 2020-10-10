@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	//You must configure it yourself at your environment variable
+	//note: You must configure it yourself at your environment variable
 	MYSQL_USERNAME = "MYSQL_USERNAME"
 	MYSQL_PASSWORD = "MYSQL_PASSWORD"
 	MYSQL_HOST     = "MYSQL_HOST"

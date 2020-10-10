@@ -10,4 +10,6 @@ func mapUrls() {
 	router.PUT("/users/:user_id", controller.Update)
 	router.PATCH("/users/:user_id", controller.Update)
 	router.DELETE("/users/:user_id", controller.Delete)
+
+	router.GET("internal/users/search", controller.Search)
 }
