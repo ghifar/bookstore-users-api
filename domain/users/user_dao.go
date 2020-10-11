@@ -3,6 +3,7 @@ package users
 import (
 	"fmt"
 	"github.com/ghifar/bookstore-users-api/datasources/mysql/users_db"
+	"github.com/ghifar/bookstore-users-api/logger"
 	"github.com/ghifar/bookstore-users-api/utils/dateUtils"
 	"github.com/ghifar/bookstore-users-api/utils/errors"
 	"github.com/ghifar/bookstore-users-api/utils/mysqlUtils"
@@ -19,13 +20,14 @@ const (
 func (user *User) Get() *errors.RestErr {
 	stmt, err := users_db.Client.Prepare(Q_GET_USER)
 	if err != nil {
+		logger.Error("error when trying to prepare get user statement", err)
 		return errors.NewInternalServerError(err.Error())
 	}
 	defer stmt.Close()
 
 	//note: returns single row only
 	getRes := stmt.QueryRow(user.Id)
-	if err := getRes.Scan(&user.Id, &user.Email, &user.FirstName, &user.LastName, &user.DateCreated, &user.Status ); err != nil {
+	if err := getRes.Scan(&user.Id, &user.Email, &user.FirstName, &user.LastName, &user.DateCreated, &user.Status); err != nil {
 		return mysqlUtils.SqlErrorParser(err)
 	}
 	return nil
